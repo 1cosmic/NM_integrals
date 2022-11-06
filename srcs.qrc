@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="images">
+    <file>simpson method small.png</file>
+  </qresource>
+</RCC>
