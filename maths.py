@@ -4,10 +4,24 @@ from numpy import arange
 
 
 def f(x):
+    '''
+    Исходный график функции.
+
+    :param x:
+    :return:
+    '''
     return sin(x)
 
 
 def generate_Xs(start, end, step):
+    '''
+    Генерация точек X.
+
+    :param start:
+    :param end:
+    :param step:
+    :return:
+    '''
     points = [i for i in arange(start, end, step)]
     # print(end)
     points.append(end)
@@ -16,6 +30,14 @@ def generate_Xs(start, end, step):
 
 
 def method_leftSqr(Xs, step):
+    """
+    Метод левосторонних прямоугольников.
+
+    :param Xs:
+    :param step:
+    :return:
+    """
+
     sum = 0
 
     for x in Xs:
@@ -25,6 +47,13 @@ def method_leftSqr(Xs, step):
 
 
 def method_centerSqr(Xs, step):
+    """
+    Метод серединных прямоугольников.
+
+    :param Xs:
+    :param step:
+    :return:
+    """
     sum = 0
 
     for x in Xs:
@@ -34,6 +63,13 @@ def method_centerSqr(Xs, step):
 
 
 def method_Simpson(Xs, step):
+    """
+    Метод Симпсона.
+
+    :param Xs:
+    :param step:
+    :return:
+    """
     # row = Xs[1:len(Xs) -1]
     sum_x1 = 0
     sum_x2 = 0
@@ -53,6 +89,14 @@ def method_Simpson(Xs, step):
 
 
 def generate_gistograms(Xs, step):
+    """
+    Генерация графика гистограмм.
+
+    :param Xs:
+    :param step:
+    :return:
+    """
+
     gistoPoints = [], []
 
     for x in Xs[:len(Xs) -1]:
