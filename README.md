@@ -10,4 +10,4 @@
 - PyQt5 (GUI)
 - pyqtgraph (функциональные графики)
 
-![Screenshot from 2022-11-06 11-32-42](https://user-images.githubusercontent.com/72942713/200159428-bf575035-a62b-4508-87bf-a6bd12f05e46.png)
+![Screenshot from 2022-11-13 16-39-49](https://user-images.githubusercontent.com/72942713/201522149-c0050571-4de2-46e8-8aae-1972dc942075.png)
