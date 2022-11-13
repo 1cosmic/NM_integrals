@@ -4,10 +4,9 @@ from datetime import datetime
 from time import sleep, time
 
 import pyqtgraph
-from PyQt5 import QtCore, QtWidgets, QtGui
-import src
+from PyQt5 import QtWidgets
 
-import mainGUI
+import mainGUI2 as mainGUI
 from maths import *
 
 # Создание класса для GUI окна.
@@ -41,42 +40,68 @@ class mainWindow(QtWidgets.QMainWindow):
         # Считываем значения с полей пользователя.
         start = self.ui.inputValuesFrom.value()
         end = self.ui.inputValuesTo.value()
-        step = self.ui.inputValuesStep.value()
+        accuracy = self.ui.inputValuesAccuracy.value() / 100
 
-        # Генерируем список из точек Х с шагом step.
-        Xs = generate_Xs(start, end, step)
 
-        # Для каждой точки из списка Xs генерим значение y = f(x)
-        Ys = [f(x) for x in Xs]
+        # Генерируем списки для дальнейшей записи в них значений Х и У.
+        Xs = []
+        Ys = []
+        lastSum = 0             # для алгоритма бинарного поиска, работа всегда в меньшую сторону.
+        step = end - start      # стартовый шаг биения задаём как всю длину графика.
+
+        # Атрибуты для алгоритма.
+        run = True
+        iterations = 0
+        delta_accuracy = 0      # Расхождение погрешности на каждой итерации.
+
+        # Пока запущен цикл, шаг каждый раз бьётся пополам и по нему вычисляется итоговая сумма интеграла.
+        # По факту - увеличиваем детализацию биения графика, пока delta_accuracy не станет меньше погрешности пользователя.
+        while run:
+            step = step / 2
+            curSum = 0
+            iterations = iterations +1
+
+            # Генерируем список из точек Х с шагом step.
+            Xs = generate_Xs(start, end, step)
+
+            # Для каждой точки из списка Xs генерим значение y = f(x)
+            Ys = [f(x) for x in Xs]
+
+            # Считываем желаемый метод расчёта и в соответствии ему запускаем требуемый метод.
+            if self.ui.radioButton_LeftSqr.isChecked():
+                curSum = method_leftSqr(Xs, step)
+                # print("Debug", curSum)
+
+            elif self.ui.radioButton_CenterSqr.isChecked():
+                curSum = method_centerSqr(Xs, step)
+
+            elif self.ui.radioButton_Simpson.isChecked():
+                curSum = method_Simpson(Xs, step)
+
+            delta_accuracy = abs(curSum - lastSum)
+            if  delta_accuracy <= accuracy:
+                run = False
+
+            lastSum = curSum
+
+
 
         # Рисуем график, который в будущем будет проинтегрирован.
         self.ui.graphicsView.plot(Xs, Ys, pen=self.penMeinGraph)
-        # print(Ys)
 
         # Считаем общее количество итераций как количество точек X.
-        iteration = len(Ys)
-        sum = 0             # итоговое значение интеграла.
         timer = time()      # посмотрим, прав ли Евгений Александрович на счёт быстродействия Симпсона >:)
-
-
-        # Считываем желаемый метод расчёта и в соответствии ему запускаем требуемый метод.
-        if self.ui.radioButton_LeftSqr.isChecked():
-            sum = method_leftSqr(Xs, step)
-
-        elif self.ui.radioButton_CenterSqr.isChecked():
-            sum = method_centerSqr(Xs, step)
-
-        elif self.ui.radioButton_Simpson.isChecked():
-            sum = method_Simpson(Xs, step)
 
         # Считаем время выполнения кода и выводим его на экран.
         timer_delay = time() - timer
         self.ui.lcd_lostTime.display(timer_delay)
 
         # Поступаем также с итоговым значением интеграла.
-        self.ui.lcd_iterations.display(iteration)
-        self.ui.lsd_integrals.display(sum)
+        self.ui.lcd_iterations.display(iterations)
+        self.ui.lsd_integrals.display(lastSum)
 
+        # Отобразим значение погрешности.
+        self.ui.lcd_iterations_2.display(delta_accuracy * 100)
 
         # Для наглядности степени детализации - отобразим гистограмму точек, соовтетствующих биению графика.
         gP = generate_gistograms(Xs, step)

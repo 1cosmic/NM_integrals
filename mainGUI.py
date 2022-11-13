@@ -177,12 +177,12 @@ class Ui_Dialog(object):
         Dialog.setTabOrder(self.pushButtonRun, self.graphicsView)
 
         self.simpson.hide()
-        self.pushButtonRun.pressed.connect(self.simpsonShow)
-        self.pushButtonRun.released.connect(self.simpson.hide)
+        self.pushbuttonrun.pressed.connect(self.simpsonshow)
+        self.pushbuttonrun.released.connect(self.simpson.hide)
 
 
-    def simpsonShow(self):
-        if self.radioButton_Simpson.isChecked():
+    def simpsonshow(self):
+        if self.radiobutton_simpson.ischecked():
             self.simpson.show()
 
     def retranslateUi(self, Dialog):
