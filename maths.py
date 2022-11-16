@@ -10,7 +10,7 @@ def f(x):
     :param x:
     :return:
     '''
-    return sin(x)
+    return pow(x, 2) - 5 * x + 8
 
 
 def generate_Xs(start, end, step):
@@ -25,6 +25,7 @@ def generate_Xs(start, end, step):
     points = [i for i in arange(start, end, step)]
     # print(end)
     points.append(end)
+    # print(points)
 
     return points
 
@@ -46,7 +47,7 @@ def method_leftSqr(Xs, step):
     return sum
 
 
-def method_centerSqr(Xs, step):
+def method_trp(Xs, step):
     """
     Метод серединных прямоугольников.
 
@@ -57,7 +58,7 @@ def method_centerSqr(Xs, step):
     sum = 0
 
     for x in Xs:
-        sum += f(x - step / 2) * step
+        sum += step * (f(x) + f(x - step)) / 2
 
     return sum
 

@@ -72,8 +72,8 @@ class mainWindow(QtWidgets.QMainWindow):
                 curSum = method_leftSqr(Xs, step)
                 # print("Debug", curSum)
 
-            elif self.ui.radioButton_CenterSqr.isChecked():
-                curSum = method_centerSqr(Xs, step)
+            elif self.ui.radioButton_trapezoid.isChecked():
+                curSum = method_trp(Xs, step)
 
             elif self.ui.radioButton_Simpson.isChecked():
                 curSum = method_Simpson(Xs, step)
@@ -84,6 +84,7 @@ class mainWindow(QtWidgets.QMainWindow):
 
             lastSum = curSum
 
+            print(iterations)
 
 
         # Рисуем график, который в будущем будет проинтегрирован.
@@ -92,9 +93,9 @@ class mainWindow(QtWidgets.QMainWindow):
         # Считаем общее количество итераций как количество точек X.
         timer = time()      # посмотрим, прав ли Евгений Александрович на счёт быстродействия Симпсона >:)
 
-        # Считаем время выполнения кода и выводим его на экран.
-        timer_delay = time() - timer
-        self.ui.lcd_lostTime.display(timer_delay)
+        # # Считаем время выполнения кода и выводим его на экран.
+        # timer_delay = time() - timer
+        # self.ui.lcd_lostTime.display(timer_delay)
 
         # Поступаем также с итоговым значением интеграла.
         self.ui.lcd_iterations.display(iterations)
